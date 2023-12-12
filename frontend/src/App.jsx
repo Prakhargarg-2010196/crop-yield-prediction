@@ -14,6 +14,7 @@ function App() {
     area
   ) => {
     setIsLoading(true);
+    setPredictionResult(null);
     const response = await axios.post("http://localhost:5000/predict", {
       state,
       district,
@@ -24,8 +25,6 @@ function App() {
     setPredictionResult(response.data.prediction);
     setIsLoading(false);
   };
-
-  console.log(predictionResult);
 
   return (
     <div className="app">
