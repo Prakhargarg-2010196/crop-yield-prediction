@@ -27,3 +27,5 @@ This project is a web application for predicting crop yield based on various fac
 ## Note
 
 Use crop_production_karnataka.csv instead of crop_production_india.csv for demo purposes as computation takes too much time for crop_production_india. Also make sure to choose state Karnataka for this case. 
+
+Change it in backend/yield_prediction.py
