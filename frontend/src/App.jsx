@@ -15,15 +15,21 @@ function App() {
   ) => {
     setIsLoading(true);
     setPredictionResult(null);
-    const response = await axios.post("http://localhost:5000/predict", {
-      state,
-      district,
-      season,
-      crop,
-      area,
-    });
-    setPredictionResult(response.data.prediction);
-    setIsLoading(false);
+    try {
+      const response = await axios.post("http://localhost:5000/predict", {
+        year: 2023,
+        state,
+        district,
+        season,
+        crop,
+        area,
+      });
+      setPredictionResult(response.data.prediction);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

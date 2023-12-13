@@ -5,69 +5,86 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 
 
-def predict(state, district, season, crop, area):
-    # Load the dataset
-    df = pd.read_csv("ML/yield_prediction/crop_production_karnataka.csv")
+class CropProductionPredictor:
+    def __init__(self):
+        self.model = None
+        self.ohe = None
 
-    # Drop the Crop_Year column
-    df = df.drop(["Crop_Year"], axis=1)
+    def preprocess_data(self, df):
+        # Categorical columns for one-hot encoding
+        categorical_cols = ["State_Name", "District_Name", "Season", "Crop"]
 
-    # Separate the features and target variables
-    X = df.drop(["Production"], axis=1)
-    y = df["Production"]
+        # One-hot encode the categorical columns
+        self.ohe = OneHotEncoder(handle_unknown="ignore")
+        X_categorical = pd.DataFrame(
+            self.ohe.fit_transform(df[categorical_cols]).toarray(),
+            columns=self.ohe.get_feature_names_out(categorical_cols),
+        )
 
-    # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
-    )
+        # Combine one-hot encoded categorical columns and numerical columns
+        X_final = pd.concat(
+            [X_categorical, df.drop(categorical_cols + ["Production"], axis=1)], axis=1
+        )
+        y = df["Production"]
 
-    # Categorical columns for one-hot encoding
-    categorical_cols = ["State_Name", "District_Name", "Season", "Crop"]
+        return X_final, y
 
-    # One-hot encode the categorical columns
-    ohe = OneHotEncoder(handle_unknown="ignore")
-    ohe.fit(X_train[categorical_cols])
+    def train_model(self, dataset_path):
+        # Load the dataset
+        df = pd.read_csv(dataset_path)
 
-    # Convert categorical columns to one-hot encoding
-    X_train_categorical = ohe.transform(X_train[categorical_cols])
-    X_test_categorical = ohe.transform(X_test[categorical_cols])
+        # Preprocess the data
+        X_final, y = self.preprocess_data(df)
 
-    # Combine the one-hot encoded categorical columns and numerical columns
-    X_train_final = np.hstack(
-        (X_train_categorical.toarray(), X_train.drop(categorical_cols, axis=1))
-    )
-    X_test_final = np.hstack(
-        (X_test_categorical.toarray(), X_test.drop(categorical_cols, axis=1))
-    )
+        # Train the model
+        self.model = RandomForestRegressor(n_estimators=100, random_state=42)
+        self.model.fit(X_final, y)
 
-    # Train the model
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
-    model.fit(X_train_final, y_train)
+    def preprocess_user_input(self, user_input_df):
+        # One-hot encode the categorical columns
+        user_input_categorical = pd.DataFrame(
+            self.ohe.transform(
+                user_input_df[["State_Name", "District_Name", "Season", "Crop"]]
+            ).toarray(),
+            columns=self.ohe.get_feature_names_out(
+                ["State_Name", "District_Name", "Season", "Crop"]
+            ),
+        )
 
-    # Get the input parameters as command line arguments
-    Jstate = state
-    Jdistrict = district
-    Jseason = season
-    Jcrops = crop
-    Jarea = area
+        # Combine one-hot encoded categorical columns and numerical columns
+        user_input_final = pd.concat(
+            [
+                user_input_categorical,
+                user_input_df.drop(
+                    ["State_Name", "District_Name", "Season", "Crop"], axis=1
+                ),
+            ],
+            axis=1,
+        )
 
-    # Get the user inputs and store them in a numpy array  - ans is 427.64
-    # user_input = np.array([['Karnataka', 'BAGALKOT', 'Kharif', 'Rice', 197]])
+        return user_input_final
 
-    user_input = np.array([[Jstate, Jdistrict, Jseason, Jcrops, Jarea]])
+    def predict(self, crop_year, state, district, season, crop, area):
+        if self.model is None or self.ohe is None:
+            raise ValueError("Model not trained. Please call train_model first.")
 
-    # Convert the categorical columns to one-hot encoding
-    user_input_categorical = ohe.transform(user_input[:, :4])
+        # Combine input parameters into a DataFrame
+        user_input_df = pd.DataFrame(
+            [[crop_year, state, district, season, crop, area]],
+            columns=[
+                "Crop_Year",
+                "State_Name",
+                "District_Name",
+                "Season",
+                "Crop",
+                "Area",
+            ],
+        )
 
-    # Combine the one-hot encoded categorical columns and numerical columns
-    user_input_final = np.hstack(
-        (user_input_categorical.toarray(), user_input[:, 4:].astype(float))
-    )
+        # Preprocess user input
+        user_input_final = self.preprocess_user_input(user_input_df)
 
-    # Make the prediction
-    prediction = model.predict(user_input_final)
+        # Make the prediction
+        prediction = self.model.predict(user_input_final)
 
-    # Return the prediction as a string
-
-    # print(str(prediction[0]))
-    return prediction
+        return prediction
