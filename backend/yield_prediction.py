@@ -37,7 +37,7 @@ class CropProductionPredictor:
         X_final, y = self.preprocess_data(df)
 
         # Train the model
-        self.model = RandomForestRegressor(n_estimators=100, random_state=42)
+        self.model = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
         self.model.fit(X_final, y)
 
     def preprocess_user_input(self, user_input_df):

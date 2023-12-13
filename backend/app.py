@@ -8,9 +8,11 @@ from yield_prediction import CropProductionPredictor
 app = Flask(__name__)
 CORS(app)
 
-model_file = "model.joblib"
-ohe_file = "ohe.joblib"
+model_file = "preprocessed/model.joblib"
+ohe_file = "preprocessed/ohe.joblib"
 predictor = CropProductionPredictor()
+
+os.makedirs(os.path.dirname(model_file), exist_ok=True)
 
 if os.path.exists(model_file) and os.path.exists(ohe_file):
     try:
