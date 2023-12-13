@@ -32,14 +32,13 @@ const PredictionForm = ({
           alignItems: "center",
           display: "flex",
           flexDirection: "column",
-          padding: "20px",
         }}
       >
         <h1>Crop Yield Prediction Demo:</h1>
         <div className="prediction-form" style={{ display: "flex" }}>
           <div
             style={{
-              padding: "20px",
+              padding: "10px",
               display: "flex",
               flexDirection: "column",
             }}
@@ -61,7 +60,7 @@ const PredictionForm = ({
           {state && (
             <div
               style={{
-                padding: "20px",
+                padding: "10px",
                 display: "flex",
                 flexDirection: "column",
               }}
@@ -83,7 +82,7 @@ const PredictionForm = ({
 
           <div
             style={{
-              padding: "20px",
+              padding: "10px",
               display: "flex",
               flexDirection: "column",
             }}
@@ -104,7 +103,7 @@ const PredictionForm = ({
 
           <div
             style={{
-              padding: "20px",
+              padding: "10px",
               display: "flex",
               flexDirection: "column",
             }}
@@ -125,7 +124,7 @@ const PredictionForm = ({
 
           <div
             style={{
-              padding: "20px",
+              padding: "10px",
               display: "flex",
               flexDirection: "column",
             }}
