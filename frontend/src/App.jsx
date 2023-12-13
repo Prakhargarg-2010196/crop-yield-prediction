@@ -99,7 +99,10 @@ function App() {
           <input
             type="number"
             value={startYear}
-            onChange={(e) => setStartYear(e.target.value)}
+            onChange={(e) => {
+              setStartYear(e.target.value);
+              setPredictionResult(null);
+            }}
             placeholder="Enter area"
             style={{ padding: "10px", borderRadius: "5px" }}
           />
@@ -111,7 +114,10 @@ function App() {
           <input
             type="number"
             value={endYear}
-            onChange={(e) => setEndYear(e.target.value)}
+            onChange={(e) => {
+              setEndYear(e.target.value);
+              setPredictionResult(null);
+            }}
             placeholder="Enter area"
             style={{ padding: "10px", borderRadius: "5px" }}
           />
