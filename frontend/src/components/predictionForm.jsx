@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 // PredictionForm.js
-import { useState } from "react";
 import {
   crops,
   seasons,
@@ -7,18 +7,18 @@ import {
   states,
 } from "/src/utils/options.json";
 
-// eslint-disable-next-line react/prop-types
-const PredictionForm = ({ onSubmit }) => {
-  const [state, setState] = useState(states[0]);
-  const [district, setDistrict] = useState(stateDistrictMapping[states[0]][0]);
-  const [season, setSeason] = useState(seasons[0]);
-  const [crop, setCrop] = useState(crops[0]);
-  const [area, setArea] = useState(0);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit(state, district, season, crop, area);
-  };
+const PredictionForm = ({
+  state,
+  setState,
+  district,
+  setDistrict,
+  season,
+  setSeason,
+  crop,
+  setCrop,
+  area,
+  setArea,
+}) => {
 
   return (
     <div
@@ -141,8 +141,6 @@ const PredictionForm = ({ onSubmit }) => {
             />
           </div>
         </div>
-        <br></br>
-        <button onClick={handleSubmit}>Submit Prediction</button>
       </div>
     </div>
   );

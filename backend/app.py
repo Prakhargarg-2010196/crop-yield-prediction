@@ -33,16 +33,20 @@ else:
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
-    prediction = predictor.predict(
-        data["year"],
-        data["state"],
-        data["district"],
-        data["season"],
-        data["crop"],
-        data["area"],
-    )
-    prediction_list = prediction.tolist()  # Convert NumPy array to list
-    return jsonify({"prediction": prediction_list})
+    predictions = []
+    startYear = int(data["startYear"])
+    endYear = int(data["endYear"])
+    for year in range(startYear, endYear + 1):
+        prediction = predictor.predict(
+            year,
+            data["state"],
+            data["district"],
+            data["season"],
+            data["crop"],
+            data["area"],
+        )
+        predictions.append(prediction.tolist())  # Convert NumPy array to list
+    return jsonify({"predictions": predictions})
 
 
 if __name__ == "__main__":
