@@ -12,7 +12,12 @@ class CropProductionPredictor:
 
     def preprocess_data(self, df):
         # Categorical columns for one-hot encoding
-        categorical_cols = ["State_Name", "District_Name", "Season", "Crop"]
+        categorical_cols = [
+            "State_Name",
+            "District_Name",
+            "Season",
+            "Crop",
+        ]
 
         # One-hot encode the categorical columns
         self.ohe = OneHotEncoder(handle_unknown="ignore")
@@ -23,7 +28,7 @@ class CropProductionPredictor:
 
         # Combine one-hot encoded categorical columns and numerical columns
         X_final = pd.concat(
-            [X_categorical, df.drop(categorical_cols + ["Production"], axis=1)], axis=1
+            [df["Crop_Year"], X_categorical, df.drop(categorical_cols + ["Production"], axis=1)], axis=1
         )
         y = df["Production"]
 
@@ -41,25 +46,23 @@ class CropProductionPredictor:
         self.model.fit(X_final, y)
 
     def preprocess_user_input(self, user_input_df):
+        # Categorical columns for one-hot encoding
+        categorical_cols = [
+            "State_Name",
+            "District_Name",
+            "Season",
+            "Crop",
+        ]
+
         # One-hot encode the categorical columns
         user_input_categorical = pd.DataFrame(
-            self.ohe.transform(
-                user_input_df[["State_Name", "District_Name", "Season", "Crop"]]
-            ).toarray(),
-            columns=self.ohe.get_feature_names_out(
-                ["State_Name", "District_Name", "Season", "Crop"]
-            ),
+            self.ohe.transform(user_input_df[categorical_cols]).toarray(),
+            columns=self.ohe.get_feature_names_out(categorical_cols),
         )
 
         # Combine one-hot encoded categorical columns and numerical columns
         user_input_final = pd.concat(
-            [
-                user_input_categorical,
-                user_input_df.drop(
-                    ["State_Name", "District_Name", "Season", "Crop"], axis=1
-                ),
-            ],
-            axis=1,
+            [user_input_df["Crop_Year"], user_input_categorical, user_input_df.drop(categorical_cols, axis=1)], axis=1
         )
 
         return user_input_final
