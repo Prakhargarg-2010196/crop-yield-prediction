@@ -19,7 +19,6 @@ const PredictionForm = ({
   area,
   setArea,
 }) => {
-
   return (
     <div
       style={{

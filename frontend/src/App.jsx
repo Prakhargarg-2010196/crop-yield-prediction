@@ -1,3 +1,4 @@
+import { LineChart } from "@mui/x-charts/LineChart";
 import axios from "axios";
 import { useState } from "react";
 import PredictionForm from "./components/predictionForm";
@@ -52,6 +53,12 @@ function App() {
     event.preventDefault();
     handlePredictionSubmit(state, district, season, crop, area);
   };
+
+  const years = [];
+
+  for (let year = startYear; year <= endYear; year++) {
+    years.push(year);
+  }
 
   if (isLoading)
     return (
@@ -120,19 +127,25 @@ function App() {
         <button onClick={handleSubmit}>Submit Prediction</button>
       </div>
       {predictionResult && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <h3>Computed Results:</h3>
-          {predictionResult.map((result, index) => (
-            <p key={index}>
-              Year {index + 2000}: {result}
-            </p>
-          ))}
+        <div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <LineChart
+              xAxis={[{ data: years }]}
+              series={[
+                {
+                  data: predictionResult,
+                },
+              ]}
+              width={500}
+              height={300}
+            />
+          </div>
         </div>
       )}
     </div>
