@@ -18,7 +18,7 @@ function App() {
   const [season, setSeason] = useState(seasons[0]);
   const [crop, setCrop] = useState(crops[0]);
   const [area, setArea] = useState(0);
-  const [startYear, setStartYear] = useState(2000);
+  const [startYear, setStartYear] = useState(1997);
   const [endYear, setEndYear] = useState(2014);
 
   const handlePredictionSubmit = async (
