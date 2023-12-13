@@ -1,2 +1,3 @@
 backend/model.joblib
 backend/ohe.joblib
+backend/__pycache__
