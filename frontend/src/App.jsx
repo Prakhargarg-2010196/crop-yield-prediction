@@ -142,7 +142,7 @@ function App() {
             }}
           >
             <LineChart
-              xAxis={[{ data: years }]}
+              xAxis={[{ data: years, valueFormatter: (v) => v.toString() }]}
               series={[
                 {
                   data: predictionResult,
