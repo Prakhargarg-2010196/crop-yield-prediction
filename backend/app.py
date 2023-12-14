@@ -23,7 +23,7 @@ if os.path.exists(model_file) and os.path.exists(ohe_file):
         print("Error loading model:", e)
 else:
     print("Training model...")
-    predictor.train_model("ML/yield_prediction/crop_production_karnataka.csv")
+    predictor.train_model("ML/yield_prediction/crop_production_india.csv")
     print("Model trained.")
     dump(predictor.model, model_file)
     dump(predictor.ohe, ohe_file)
