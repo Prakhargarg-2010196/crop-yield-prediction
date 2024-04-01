@@ -16,13 +16,7 @@ This project is a web application for predicting crop yield based on various fac
 
 ## Usage
 
-1. Start the Flask backend:
-    cd backend
-    python app.py
-
-2. In a new terminal window, start the React frontend:
-    cd frontend
-    npm run dev
+npm start
 
 ## Note
 
